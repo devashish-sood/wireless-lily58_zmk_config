@@ -49,9 +49,9 @@ static void update(lv_timer_t *timer) {
     for (unsigned y=0;y<WALKIES_HEIGHT;y++) {
         for (unsigned x=0;x<WALKIES_WIDTH;x++) {
 #if IS_ENABLED(CONFIG_NICE_VIEW_ROTATE_180)
-            unsigned panel_x=159-y, panel_y=x;
-#else
             unsigned panel_x=y, panel_y=67-x;
+#else
+            unsigned panel_x=159-y, panel_y=x;
 #endif
             pixels[panel_y*stride+panel_x]=walkies_pixel(image,x,y)?0:255;
         }
