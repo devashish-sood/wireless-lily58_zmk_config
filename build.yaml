@@ -2,7 +2,7 @@
 ---
 include:
   - board: blelulu_left
-    snippet: studio-rpc-usb-uart
+    snippet: studio-rpc-usb-uart;zmk-usb-logging
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     shield: walkies
   - board: blelulu_right
