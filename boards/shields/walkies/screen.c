@@ -6,6 +6,11 @@
 #include "render.h"
 #include "sync.h"
 
+BUILD_ASSERT(CONFIG_LV_Z_BITS_PER_PIXEL == 1, "Walkies requires a monochrome display buffer");
+BUILD_ASSERT(IS_ENABLED(CONFIG_LV_COLOR_DEPTH_1), "Walkies requires 1-bit display color depth");
+BUILD_ASSERT(IS_ENABLED(CONFIG_LV_Z_MONOCHROME_CONVERSION_BUFFER),
+             "Walkies requires the LVGL monochrome conversion buffer");
+
 #if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
 #include <zmk/ble.h>
 #include <zmk/endpoints.h>
@@ -55,11 +60,18 @@ static void update(lv_timer_t *timer) {
 }
 
 lv_obj_t *zmk_display_status_screen(void) {
+    // A display initialization/allocation failure must not take down typing.
+    if (lv_display_get_default()==NULL) return NULL;
     lv_obj_t *screen=lv_obj_create(NULL);
+    if (screen==NULL) return NULL;
     lv_obj_t *canvas=lv_canvas_create(screen);
+    if (canvas==NULL) {
+        lv_obj_delete(screen);
+        return NULL;
+    }
     lv_canvas_set_buffer(canvas,pixels,160,68,LV_COLOR_FORMAT_L8);
     lv_obj_set_pos(canvas,0,0);
     lv_timer_t *timer=lv_timer_create(update,250,canvas);
-    update(timer);
+    if (timer!=NULL) update(timer);
     return screen;
 }
