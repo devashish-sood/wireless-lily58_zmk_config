@@ -21,7 +21,7 @@ static atomic_t received;
 #include <zmk/wpm.h>
 
 static void send_activity(struct k_work *work);
-K_WORK_DELAYABLE_DEFINE(activity_work, send_activity);
+static K_WORK_DELAYABLE_DEFINE(walkies_activity_work, send_activity);
 
 bool walkies_typing(uint8_t *wpm) {
     *wpm = zmk_wpm_get_state();
@@ -42,7 +42,7 @@ static void send_activity(struct k_work *work) {
         // Display updates are disposable. A missing peer must not affect typing.
         (void)zmk_split_central_invoke_behavior(i, &binding, event, true);
     }
-    k_work_schedule(&activity_work, K_SECONDS(1));
+    k_work_schedule(&walkies_activity_work, K_SECONDS(1));
 }
 
 static int activity_listener(const zmk_event_t *eh) {
@@ -51,7 +51,7 @@ static int activity_listener(const zmk_event_t *eh) {
         atomic_set(&last_update,(atomic_val_t)k_uptime_get_32());
         atomic_set(&received,1);
         // schedule() preserves an existing deadline, bounding traffic to 1 Hz.
-        k_work_schedule(&activity_work,K_NO_WAIT);
+        k_work_schedule(&walkies_activity_work,K_NO_WAIT);
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
