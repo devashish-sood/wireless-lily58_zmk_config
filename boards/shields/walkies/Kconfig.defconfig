@@ -1,0 +1,25 @@
+if SHIELD_WALKIES
+
+config LS0XX_VCOM_THREAD_PRIO
+    default 11
+
+choice ZMK_DISPLAY_WORK_QUEUE
+    default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
+endchoice
+
+choice ZMK_DISPLAY_STATUS_SCREEN
+    default ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
+endchoice
+
+config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
+    select LV_USE_CANVAS
+    select ZMK_WPM if ZMK_SPLIT_ROLE_CENTRAL
+
+config LV_Z_MEM_POOL_SIZE
+    default 8192
+
+# Keep the existing board/user orientation setting available for this shield.
+config NICE_VIEW_ROTATE_180
+    bool "Rotate the Walkies display 180 degrees"
+
+endif
