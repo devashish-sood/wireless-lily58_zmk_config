@@ -41,6 +41,12 @@ int main(void) {
     s.wpm=0; walkies_render(a,&s,true);
     s.wpm=255; walkies_render(b,&s,true);
     assert(memcmp(a,b,sizeof(a))==0); // typing speed is no longer visible on the left
+    s.profile=0; walkies_render(a,&s,true);
+    s.profile=1; walkies_render(b,&s,true);
+    assert(memcmp(a,b,sizeof(a))!=0); // personal and work profiles are distinguishable
+    s.usb=true; walkies_render(a,&s,true);
+    s.profile=0; walkies_render(b,&s,true);
+    assert(memcmp(a,b,sizeof(a))==0); // USB must not claim a Bluetooth host identity
     assert(!walkies_pixel(a,68,0));
     assert(!walkies_pixel(a,0,160));
     puts("Walkies rendering checks passed");

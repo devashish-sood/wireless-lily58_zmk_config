@@ -31,6 +31,9 @@ with tempfile.TemporaryDirectory(prefix="walkies-preview-") as tmp:
                     "-Iboards/shields/walkies", "tools/walkies_preview.c",
                     "boards/shields/walkies/render.c", "-o", binary], cwd=ROOT, check=True)
     modes = {}
+    for name, profile, usb in [("personal", 0, 0), ("work", 1, 0), ("usb", 1, 1)]:
+        raw = subprocess.check_output([binary, "0", "25", str(profile), str(usb)]).split(b"\n", 3)[3]
+        (ROOT / f"docs/walkies-{name}.png").write_bytes(png(raw, 148, 160, 4))
     for mode, wpm, count in [("rest", 0, 2), ("walk", 25, 512), ("run", 65, 512)]:
         frames = []
         for step in range(count):

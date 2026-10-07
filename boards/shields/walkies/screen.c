@@ -31,6 +31,7 @@ static void update(lv_timer_t *timer) {
     state.battery=zmk_battery_state_of_charge();
 #if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
     state.layer=zmk_keymap_highest_layer_active();
+    state.profile=zmk_ble_active_profile_index();
     state.usb=zmk_endpoint_get_selected().transport==ZMK_TRANSPORT_USB;
     state.connected=state.usb?zmk_usb_is_hid_ready():zmk_ble_active_profile_is_connected();
     state.paired=state.usb || !zmk_ble_active_profile_is_open();

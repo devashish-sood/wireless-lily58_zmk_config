@@ -10,6 +10,7 @@
 struct walkies_state {
     uint8_t battery;
     uint8_t layer;
+    uint8_t profile; /* Zero-based Bluetooth profile; a label, not a host name. */
     uint8_t wpm;
     uint8_t rest_frame;
     bool usb;

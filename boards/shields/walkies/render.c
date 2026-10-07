@@ -90,7 +90,11 @@ static void status(uint8_t *im, const struct walkies_state *s) {
     centered(im,38,"LAYER",1);
     snprintf(label,sizeof(label),"%u",s->layer);
     centered(im,49,label,3);
-    centered(im,79,s->usb?"USB":"BT",2);
+    if (s->usb) snprintf(label,sizeof(label),"USB");
+    else if (s->profile==0) snprintf(label,sizeof(label),"BT PERS");
+    else if (s->profile==1) snprintf(label,sizeof(label),"BT WORK");
+    else snprintf(label,sizeof(label),"BT %u",(unsigned)s->profile+1);
+    centered(im,79,label,2);
     centered(im,96,s->connected?"CONNECTED":(s->paired?"OFFLINE":"PAIRING"),1);
 }
 

@@ -7,6 +7,8 @@ int main(int argc,char **argv) {
     struct walkies_state s={.battery=87,.wpm=argc>2?(unsigned)atoi(argv[2]):25,.connected=true,.paired=true,
                            .moving=argc<=2 || atoi(argv[2])>0,.step=argc>1?(unsigned)atoi(argv[1]):0};
     uint8_t left[WALKIES_BYTES],right[WALKIES_BYTES];
+    s.profile=argc>3?(unsigned)atoi(argv[3]):0;
+    s.usb=argc>4 && atoi(argv[4])!=0;
     s.rest_frame=s.step%2;
     if (!s.moving) s.step=0;
     walkies_render(left,&s,true);
